@@ -24,7 +24,7 @@ function info_2dates() {
 		method: "get"
 	}).then((response) => {
 		if(response.status != 200){
-			alert(res.statusText);
+			alert(response.statusText);
 			return
 		}
 		response.json().then((data) => {
@@ -98,7 +98,7 @@ function info_date() {
 		method: "get"
 	}).then((response) => {
 		if(response.status != 200){
-			alert(res.statusText);
+			alert(response.statusText);
 			return
 		}
 		response.json().then((data) => {

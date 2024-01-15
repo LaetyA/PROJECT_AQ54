@@ -1,0 +1,32 @@
+# AQ54 
+
+## Description
+
+Le projet AQ54 vise à étudier la qualité de l'air à Abidjan en déployant des capteurs Airqino dans la ville pour mesurer la quantité de particules fines dans l'air. La plateforme de surveillance environnementale Aquino est utilisée pour collecter et analyser ces données.
+
+## Ressources
+
+### API et Capteurs
+
+- **Url de l'API :** [https://airqino-api.magentalab.it/](https://airqino-api.magentalab.it/)
+- **Capteurs :**
+  - SMART188
+  - SMART189
+
+## Aperçu
+
+## Aperçu
+
+![Capture d'écran :visualtion en temps réel avec smoothie](/src/temps_reel.PNG)
+![Capture d'écran :visualtion pour la date du 14/01/2024](/src/jour.PNG)
+
+
+## Technologies Utilisées
+
+- HTML
+- CSS 
+-JS
+- [Smoothie.js](https://smoothiecharts.org/)
+- [Google Chart](https://developers.google.com/chart)
+- [Font Awesome](https://fontawesome.com/) - Pour les icônes
+- [Bootstrap](https://getbootstrap.com/) - Framework CSS

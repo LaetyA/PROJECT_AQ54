@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>AQ54 PROJECT</title>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/smoothie/1.34.0/smoothie.js"></script>
+	<script src="https://www.gstatic.com/charts/loader.js"></script>
+
+	<link rel="stylesheet" href="src/css/style.css">
+</head>
+
+<body>
+	<div class="container">
+		<!-- entete -->
+		<nav class="py-2 bg-body-tertiary border-bottom">
+			<div class="container d-flex flex-wrap">
+				<ul class="nav me-auto">
+					<li class="nav-item"><a href="" class="nav-link link-body-emphasis px-2 active" aria-current="page">DASHBOARD AQ54</a></li>
+				</ul>
+			
+			</div>
+		</nav>
+		<div class="row card-row" >
+			<div class="col-md-6">
+				<!-- card 1  -->
+				<div class="card m-3 h-100">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">SMART188 en temps réel</li>
+						<li id="d1" class="list-group-item">chargement...</li>
+						<div class="col p-3">
+							<canvas id="smoothie-chart" width="400" height="380" ></canvas>
+							<div id="legend-graphe1"></div>
+						</div>
+           
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<!-- card 2  -->
+				<div class="card m-3 h-100">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">SMART189 en temps réel</li>
+						<li id="d2" class="list-group-item">chargement...</li>
+						<div class="col p-3">
+							<canvas id="smoothie-chart-smart189" width="400" height="380" ></canvas>
+							<div id="legend-graphe2"></div>
+						</div>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="card m-3 h-100">
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">
+          <p>Periode pour la visualisation</p>
+					<button type="button" class="btn btn-light" onclick="affichage_form1()">un jour </button>
+					<button type="button" class="btn btn-light" onclick="affichage_form2()">plage de dates</button>
+				</li>
+				<li class="list-group-item">
+					<div class="row">
+						<div class="col-2">
+							<!-- form  pour selection une date -->
+							<div id="form1" style="display: none;">
+								<form>
+									<div class="mb-3">
+										<label for="station" class="form-label">station</label>
+										<select class="form-select" aria-label="Default select example" id="station_selection">
+											<option selected disabled>Selectionner une station</option>
+											<option value="SMART188" selected>SMART 188</option>
+											<option value="SMART189">SMART 189</option>
+										</select>
+									</div>
+									<div class="mb-3">
+										<label for="date" class="form-label">Date</label>
+										<input type="date" class="form-control" id="date_jour" value="2024-01-14"> </div>
+									<button type="button" class="btn btn-primary" onclick="info_date()">valider</button>
+								</form>
+							</div>
+							<!-- form  pour selection deux dates -->
+							<div id="form2" style="display: none;">
+								<form>
+									<div class="mb-3">
+										<label for="station" class="form-label">station</label>
+										<select class="form-select" aria-label="Default select example" id="valeur_station">
+											<option selected disabled>Selectionner une station</option>
+											<option value="SMART188">SMART 188</option>
+											<option value="SMART189">SMART 189</option>
+										</select>
+									</div>
+									<div class="mb-3">
+										<label for="date" class="form-label">Date debut</label>
+										<input type="date" class="form-control" id="date_debut"> </div>
+									<div class="mb-3">
+										<label for="date" class="form-label">Date fin</label>
+										<input type="date" class="form-control" id="date_fin"> </div>
+									<button type="button" class="btn btn-primary" onclick="info_2dates()">valider</button>
+								</form>
+							</div>
+						</div>
+						<div class="col-10">
+							<!-- graphe une date  -->
+							<div id="loadingIcon" style="display: none;"> <i class="fas fa-spinner fa-spin"></i> Chargement... </div>
+							<div id="myChartGoogle" style="width:900px; height:400px;display:none;"></div>
+							<div id="loadingIcon2" style="display: none;"> <i class="fas fa-spinner fa-spin"></i> Chargement... </div>
+							<div id="myChart_2dates" style="width:900px; height:400px;display:none;"></div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<script>
+		
+		let station_d1 = document.getElementById("d1");
+		let station_d2 = document.getElementById("d2");
+		fetch("https://airqino-api.magentalab.it/getSessionInfo/AQ54", {
+			method: "get"
+		}).then((response) => {
+			response.json().then((data) => {
+				let table_station = [];
+				let size = data.length;
+				for(i = 0; i < size; i++) {
+					table_station.push(data[i]["station"])
+						
+				}
+				station_d1.innerHTML = `
+          <i class="fas fa-map-marker-alt"></i><span>  ${data[0]["description"]}</span>
+       `
+				station_d2.innerHTML = `
+          <i class="fas fa-map-marker-alt"></i><span>  ${data[1]["description"]}</span>
+        `
+			});
+		})
+		</script>
+		
+		<script src="src/js/smoothie1.js"></script>
+		<script src="src/js/smoothie2.js"></script>
+		<script src="src/js/google_chart.js"></script>
+</body>
+
+</html>

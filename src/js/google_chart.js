@@ -20,7 +20,7 @@ function info_2dates() {
 	console.log(station_select);
 	let graphDiv2 = document.getElementById("myChart_2dates");
 	graphDiv2.style.display = "block";
-	fetch(`https://airqino-api.magentalab.it/getSingleDay/${station_select}/${debut}`, {
+	fetch(`https://airqino-api.magentalab.it/getRange/${station_select}/${debut}/${fin}`, {
 		method: "get"
 	}).then((response) => {
 		if(response.status != 200){
